@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>위치 추적 PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="/images/icons/favicon.ico" type="image/x-icon">
+    <script defer src="app.js"></script>
+    <script 
+        async 
+        defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDecyT_N4ervMgT3Sod-B00qxmr4y0wlFw&callback=initMap&loading=async"></script>
+    <style>
+        body, html { height: 100%; margin: 0; }
+        #map { width: 100%; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- 알림 소리 재생을 위한 오디오 태그 -->
+    <audio id="alertSound" src="/sounds/happy_home.mp3" preload="auto"></audio>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service_worker.js')
+                .then(reg => console.log('Service Worker 등록 성공:', reg.scope))
+                .catch(err => console.log('Service Worker 등록 실패:', err));
+        }
+    </script>
+</body>
+</html>

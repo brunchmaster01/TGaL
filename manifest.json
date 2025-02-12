@@ -1,0 +1,32 @@
+{
+    "name": "TourGuide at location",
+    "short_name": "TGaL",
+    "description": "TGaL start program",
+    "scope": ".",
+    "start_url": "./",
+    "display": "standalone",
+    "orientation" : "portrait",
+    "background_color" : "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+      {
+        "src": "images/icons/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "images/icons/android-chrome-512x512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],  
+    "shortcuts": [
+      {
+        "name": "새 창 TGaL",
+        "short_name": "새 창",
+        "description": "새 창 TGaL",
+        "url": "./",
+        "icons": [{ "src": "images/icons/android-chrome-192x192.png", "sizes": "192x192" }]
+      }
+    ]
+  }
