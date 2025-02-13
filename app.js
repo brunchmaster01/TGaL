@@ -1,7 +1,7 @@
 let map;
 let marker;
-const targetLocation = { lat: 36.25841955979793, lng: 136.9068227572773 }; // 목표 위치
-const radius = 100; // 목표 반경 (미터 단위)
+const targetLocation = { lat: 36.258419, lng: 136.906820 }; // 목표 위치
+const radius = 1500; // 목표 반경 (미터 단위)
 
 // 오디오 객체 생성 (자동 재생을 위한 준비)
 const audio = new Audio('/sounds/happy_home.mp3'); // 경로에 맞게 수정
