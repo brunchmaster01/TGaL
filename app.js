@@ -1,6 +1,6 @@
 let map;
 let marker;
-const targetLocation = { lat: 37.483393, lng: 126.729683 }; // 목표 위치
+const targetLocation = { lat: 37.504589, lng: 126.749502 }; // 목표 위치
 const radius = 1000; // 목표 반경 (미터 단위)
 
 // 오디오 객체 생성 (자동 재생을 위한 준비)
