@@ -1,13 +1,18 @@
 let map;
 let marker;
-const targetLocation = { lat: 36.258419, lng: 136.906820 }; // 목표 위치
-const radius = 1500; // 목표 반경 (미터 단위)
 
-// 오디오 객체 생성 (자동 재생을 위한 준비)
-const audio = new Audio('/sounds/happy_home.mp3'); // 경로에 맞게 수정
-let audioPlayed = false; // 중복 재생 방지
-
-audio.loop = false; // 반복 여부 (원하면 true)
+// 목표 위치 10개 및 각 위치별 반경, 음원 파일 설정
+const targets = [
+    { lat: 36.258445, lng: 136.906819, radius: 1500, audioSrc: "/sounds/alarm01.mp3", played: false },
+    { lat: 36.263054, lng: 136.908559, radius: 40, audioSrc: "/sounds/alarm02.mp3", played: false },
+    { lat: 36.261970, lng: 136.906830, radius: 40, audioSrc: "/sounds/alarm03.mp3", played: false },
+    { lat: 36.260297, lng: 136.907088, radius: 100, audioSrc: "/sounds/alarm04.mp3", played: false },
+    { lat: 36.257397, lng: 136.907612, radius: 40, audioSrc: "/sounds/alarm05.mp3", played: false },
+    { lat: 36.256108, lng: 136.906638, radius: 40, audioSrc: "/sounds/alarm06.mp3", played: false },
+    { lat: 36.255235, lng: 136.902372, radius: 40, audioSrc: "/sounds/alarm07.mp3", played: false },
+    { lat: 36.257852, lng: 136.906190, radius: 200, audioSrc: "/sounds/alarm08.mp3", played: false },
+    { lat: 37.504527, lng: 126.749448, radius: 2000, audioSrc: "/sounds/alarm01.mp3", played: false } 
+];
 
 // 거리 계산 함수 (Haversine 공식)
 function getDistance(lat1, lon1, lat2, lon2) {
@@ -32,7 +37,6 @@ function initMap() {
         return;
     }
 
-
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 15
     });
@@ -42,7 +46,7 @@ function initMap() {
             const { latitude, longitude } = position.coords;
             const userLocation = { lat: latitude, lng: longitude };
 
-            // 지도 중심을 업데이트
+            // 지도 중심 업데이트
             map.setCenter(userLocation);
 
             if (!marker) {
@@ -54,6 +58,17 @@ function initMap() {
             } else {
                 marker.setPosition(userLocation);
             }
+
+            // 각 목표 지점과의 거리 계산
+            targets.forEach(target => {
+                const distance = getDistance(latitude, longitude, target.lat, target.lng);
+                console.log(`목표 위치 (${target.audioSrc}) 까지 거리: ${distance.toFixed(2)}m, 반경: ${target.radius}m`);
+
+                if (distance <= target.radius && !target.played) {
+                    playAudio(target.audioSrc);
+                    target.played = true; // 중복 재생 방지
+                }
+            });
         },
         (error) => {
             console.error("위치 오류:", error);
@@ -66,52 +81,13 @@ function initMap() {
     );
 }
 
-// 실시간 위치 추적 및 이벤트 감지
-function trackLocation() {
-    if ('geolocation' in navigator) {
-        navigator.geolocation.watchPosition(position => {
-            const { latitude, longitude } = position.coords;
-            const userLocation = { lat: latitude, lng: longitude };
-
-            console.log(`위치 업데이트: 위도 ${latitude}, 경도 ${longitude}`);
-
-            // 지도 업데이트
-            if (map && marker) {
-                map.setCenter(userLocation);
-                marker.setPosition(userLocation);
-            }
-
-            // 목표 위치와 현재 위치 거리 계산
-            const distance = getDistance(latitude, longitude, targetLocation.lat, targetLocation.lng);
-            console.log(`목표 위치까지 거리: ${distance.toFixed(2)}m`);
-
-            // 목표 반경 이내 도달 시 알림 음악 재생
-            if (distance <= radius && !audioPlayed) {
-                playAudio(); // 자동 재생
-                audioPlayed = true; // 중복 재생 방지
-            }
-
-        }, error => {
-            console.error('위치 추적 오류:', error);
-        }, {
-            enableHighAccuracy: true,
-            maximumAge: 30000,
-            timeout: 27000
-        });
-    } else {
-        console.error('Geolocation이 지원되지 않습니다.');
-    }
-}
-
 // mp3 자동 재생 함수
-function playAudio() {
-    const audio = document.getElementById('alertSound');
-    if (audio) {
-        audio.play().catch(error => console.error('오디오 재생 오류:', error));
-    }
+function playAudio(src) {
+    const audio = new Audio(src);
+    audio.play().catch(error => console.error('오디오 재생 오류:', error));
 }
 
 // HTML 문서가 로드되면 위치 추적 시작
 document.addEventListener("DOMContentLoaded", () => {
-    trackLocation();
+    initMap();
 });
